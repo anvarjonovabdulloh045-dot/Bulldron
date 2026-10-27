@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bulldrop — кейсы Standoff 2</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0b0c10;
+            color: #ffffff;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .bg-card {
+            background: #12141a;
+            border: 1px solid #1f2330;
+        }
+        .bg-card:hover {
+            border-color: #f59e0b;
+        }
+        .gold-text {
+            color: #f59e0b;
+        }
+        .gold-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2330;
+            border-radius: 4px;
+        }
+        /* Item Rarity Colors */
+        .rarity-arcane { border-color: #e11d48; background: linear-gradient(180deg, rgba(225,29,72,0.1), #12141a); }
+        .rarity-legendary { border-color: #f59e0b; background: linear-gradient(180deg, rgba(245,158,11,0.1), #12141a); }
+        .rarity-epic { border-color: #a855f7; background: linear-gradient(180deg, rgba(168,85,247,0.1), #12141a); }
+        .rarity-rare { border-color: #3b82f6; background: linear-gradient(180deg, rgba(59,130,246,0.1), #12141a); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between pb-20">
+
+    <!-- Header -->
+    <header class="bg-[#0f1117] border-b border-[#1b1e2a] px-4 py-2.5 sticky top-0 z-50 flex items-center justify-between">
+        <!-- Logo with Secret Triple-Tap Listener for Owner Panel -->
+        <div id="logo-btn" class="flex items-center space-x-2 cursor-pointer active:opacity-80">
+            <div class="relative w-8 h-8 flex items-center justify-center">
+                <i class="fa-solid fa-bullhorn text-red-500 text-2xl transform -rotate-12"></i>
+            </div>
+            <span class="font-extrabold text-xl tracking-tight text-white">BULLDROP</span>
+        </div>
+
+        <!-- Balance Section -->
+        <div class="flex items-center space-x-2">
+            <div class="bg-[#171a24] border border-[#262b3d] px-3 py-1 rounded-full flex items-center space-x-1.5">
+                <i class="fa-solid fa-coins gold-text text-xs"></i>
+                <span id="user-balance" class="font-bold text-sm gold-text">0,94</span>
+                <span class="text-[10px] text-gray-400 font-medium">(0,94 ₴)</span>
+            </div>
+            <button onclick="openDepositModal()" class="w-7 h-7 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg transition">
+                <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-md md:max-w-4xl w-full mx-auto p-3 flex flex-col space-y-6">
+
+        <!-- Case List Section -->
+        <div id="case-view" class="w-full space-y-6">
+            
+            <!-- Tricky Promo Banner -->
+            <div class="w-full bg-gradient-to-b from-[#3b1562] to-[#1d0b36] border border-purple-500/30 rounded-2xl p-5 relative overflow-hidden shadow-2xl text-center flex flex-col items-center">
+                <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-widest mb-2">
+                    promo
+                </span>
+                <h1 class="text-3xl font-black text-white tracking-wider mb-1">TRICKY</h1>
+                <p class="text-xs text-purple-300 font-semibold mb-2">PROMO</p>
+                <h2 class="text-xl font-bold text-white mb-2">Презент от Трики</h2>
+                <p class="text-xs text-purple-200 max-w-xs mb-4">
+                    Трики знает, как пополнить выгоднее: +15% к балансу по промо TRICKY уже твои!
+                </p>
+                <button onclick="claimPromoBonus()" class="bg-white hover:bg-gray-100 text-gray-900 font-bold px-8 py-3 rounded-xl text-xs transition shadow-lg w-full max-w-xs">
+                    Забрать подарок
+                </button>
+            </div>
+
+            <!-- Categories / Games Filter -->
+            <div class="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none">
+                <button class="bg-[#1f2433] text-white px-4 py-2 rounded-xl text-xs font-bold border border-purple-500 flex items-center space-x-1.5 shrink-0">
+                    <span>SO2</span>
+                </button>
+                <button class="bg-[#141722] text-gray-400 px-4 py-2 rounded-xl text-xs font-bold shrink-0">PUBG</button>
+                <button class="bg-[#141722] text-gray-400 px-4 py-2 rounded-xl text-xs font-bold shrink-0">CS2</button>
+                <button class="bg-[#141722] text-gray-400 px-4 py-2 rounded-xl text-xs font-bold shrink-0">FREE FIRE</button>
+                <button class="bg-[#141722] text-gray-400 px-4 py-2 rounded-xl text-xs font-bold shrink-0">RUST</button>
+            </div>
+
+            <!-- Halloween Series -->
+            <section>
+                <div class="flex items-center space-x-2 mb-3">
+                    <span class="text-lg">🎃</span>
+                    <h3 class="font-bold text-sm tracking-wide text-white">Halloween</h3>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <!-- Obsessiya -->
+                    <div onclick="selectCase('Обсессия', 5)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center relative overflow-hidden">
+                        <div class="text-[10px] text-amber-400 font-semibold mb-1">⏱ 514 201 / 1 000 000</div>
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-ghost text-5xl text-purple-400"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Обсессия</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>5</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Zakulise -->
+                    <div onclick="selectCase('Закулисье', 10)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center relative overflow-hidden">
+                        <div class="text-[10px] text-amber-400 font-semibold mb-1">⏱ 157 667 / 800 000</div>
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-mask text-5xl text-amber-500"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Закулисье</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>10</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Jeff -->
+                    <div onclick="selectCase('Джефф', 15)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center relative overflow-hidden">
+                        <div class="text-[10px] text-amber-400 font-semibold mb-1">⏱ 78 348 / 600 000</div>
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-[#181c28] fa-skull text-5xl text-red-500"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Джефф</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>15</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Chaki -->
+                    <div onclick="selectCase('Чаки', 20)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center relative overflow-hidden">
+                        <div class="text-[10px] text-amber-400 font-semibold mb-1">⏱ 60 748 / 400 000</div>
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-robot text-5xl text-blue-400"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Чаки</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>20</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Special Series "Каникулы – В C Ё" -->
+            <section>
+                <div class="flex items-center space-x-2 mb-3">
+                    <span class="bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold">1</span>
+                    <h3 class="font-bold text-sm tracking-wide text-white">Каникулы – В C Ё</h3>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <!-- Fizruk -->
+                    <div onclick="selectCase('Физрук', 80)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center">
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-futbol text-5xl text-blue-500"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Физрук</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>80</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Matematichka -->
+                    <div onclick="selectCase('Математичка', 120)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center">
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-calculator text-5xl text-green-500"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Математичка</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>120</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Russichka -->
+                    <div onclick="selectCase('Руссичка', 160)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center">
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-book text-5xl text-yellow-500"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Руссичка</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>160</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Direktrisa -->
+                    <div onclick="selectCase('Директриса', 200)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center">
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-user-tie text-5xl text-purple-500"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Директриса</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>200</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sweet Series -->
+            <section>
+                <div class="flex items-center space-x-2 mb-3">
+                    <span class="text-lg">🍬</span>
+                    <h3 class="font-bold text-sm tracking-wide text-white">Сладкая серия</h3>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div onclick="selectCase('Twix', 65)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center">
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-cookie-bite text-5xl text-amber-600"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Twix</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>65</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="selectCase('Snickers', 70)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center">
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-candy-cane text-5xl text-amber-800"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Snickers</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>70</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="selectCase('Bounty', 75)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center">
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-[#181c28] fa-tree text-5xl text-cyan-500"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">Bounty</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>75</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="selectCase('KitKat', 135)" class="bg-card rounded-2xl p-3 cursor-pointer transition flex flex-col items-center">
+                        <div class="w-24 h-24 my-2 flex items-center justify-center">
+                            <i class="fa-solid fa-box text-5xl text-red-600"></i>
+                        </div>
+                        <span class="font-bold text-xs text-gray-200 mb-2">KitKat</span>
+                        <div class="bg-[#181c28] border border-[#282f44] px-4 py-1.5 rounded-xl font-bold text-xs gold-text flex items-center space-x-1">
+                            <span>135</span> <i class="fa-solid fa-coins text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Roulette Area (Hidden by Default) -->
+        <div id="roulette-view" class="w-full hidden flex-col items-center py-6">
+            <h2 id="selected-case-title" class="text-xl font-bold text-white mb-4">Открытие кейса...</h2>
+            
+            <!-- Horizontal Wheel Track -->
+            <div class="relative w-full max-w-lg h-44 bg-[#0f1117] border-2 border-[#22283a] rounded-2xl overflow-hidden my-4 flex items-center">
+                <div class="absolute top-0 bottom-0 left-1/2 w-1 bg-red-500 z-30 transform -translate-x-1/2 shadow-[0_0_12px_#ef4444]"></div>
+                <div id="roulette-track" class="flex absolute left-0 space-x-3 px-3 transition-transform duration-[4000ms] ease-[cubic-bezier(0.15,0.85,0.25,1)]"></div>
+            </div>
+
+            <button id="open-btn" onclick="startRouletteSpin()" class="gold-btn text-gray-900 font-extrabold px-10 py-3.5 rounded-2xl shadow-xl transition text-sm mt-2">
+                Открыть кейс
+            </button>
+            <button onclick="backToCases()" class="mt-4 text-xs text-gray-400 hover:text-white transition">
+                ← Назад к кейсам
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#0f1117] border-t border-[#1b1e2a] py-2 px-4 flex justify-around items-center z-40">
+        <button onclick="backToCases()" class="flex flex-col items-center text-purple-400 text-[10px] font-bold space-y-1">
+            <i class="fa-solid fa-box-archive text-base"></i>
+            <span>Лутбоксы</span>
+        </button>
+        <button onclick="openDepositModal()" class="flex flex-col items-center text-gray-400 hover:text-white transition text-[10px] font-bold space-y-1">
+            <i class="fa-solid fa-wallet text-base"></i>
+            <span>Пополнить</span>
+        </button>
+        <button onclick="alert('Раздел Игры')" class="flex flex-col items-center text-gray-400 hover:text-white transition text-[10px] font-bold space-y-1">
+            <i class="fa-solid fa-gamepad text-base"></i>
+            <span>Игры</span>
+        </button>
+        <button onclick="alert('Чат')" class="flex flex-col items-center text-gray-400 hover:text-white transition text-[10px] font-bold space-y-1">
+            <i class="fa-solid fa-comment-dots text-base"></i>
+            <span>Чат</span>
+        </button>
+        <button onclick="alert('Меню')" class="flex flex-col items-center text-gray-400 hover:text-white transition text-[10px] font-bold space-y-1">
+            <i class="fa-solid fa-bars text-base"></i>
+            <span>Меню</span>
+        </button>
+    </nav>
+
+    <!-- SECRET OWNER / ADMIN MODAL -->
+    <div id="owner-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#12141a] border border-purple-500/40 rounded-2xl max-w-sm w-full p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-extrabold text-base text-purple-400 flex items-center space-x-2">
+                    <i class="fa-solid fa-crown text-yellow-400"></i>
+                    <span>Панель Владельца</span>
+                </h3>
+                <button onclick="closeOwnerModal()" class="text-gray-400 hover:text-white"><i cla
